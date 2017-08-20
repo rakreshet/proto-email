@@ -1,0 +1,67 @@
+apply from: "$rootDir/versions.gradle"
+group 'com.traiana.email'
+version '0.1-SNAPSHOT'
+
+subprojects { sub ->
+  group 'com.traiana.email'
+  version '1.0-SNAPSHOT'
+
+  buildscript {
+    repositories {
+      maven { url 'http://artifactory.ops.traiana.int/artifactory/libs-release' }
+      maven { url 'http://artifactory.ops.traiana.int/artifactory/libs-snapshot' }
+    }
+  }
+  apply plugin: 'java'
+  apply plugin: 'maven'
+
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
+
+  tasks.withType(ScalaCompile) {
+    scalaCompileOptions.additionalParameters = [
+        "-deprecation",
+        "-unchecked",
+        "-encoding", "utf8",
+        "-target:jvm-${sourceCompatibility}".toString(),
+        "-Xlog-reflective-calls",
+        "-feature",
+        "-language:postfixOps",
+        "-language:implicitConversions",
+        "-language:existentials"
+    ]
+  }
+
+  task srcJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+  }
+
+  artifacts {
+    archives srcJar
+  }
+
+  archivesBaseName = "${sub.name}_${ver.scalaBase}"
+
+  jar.manifest {
+    attributes(
+        'Implementation-Title': sub.name,
+        'Implementation-Version': "${version}",
+        'Implementation-Vendor': 'Traiana')
+  }
+
+  repositories {
+    maven { url 'http://artifactory.ops.traiana.int/artifactory/libs-release' }
+    maven { url 'http://artifactory.ops.traiana.int/artifactory/libs-snapshot' }
+  }
+
+  configurations {
+    compile.exclude module: 'slf4j-log4j12'
+  }
+
+  compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << "-Xlint:deprecation"
+  }
+
+}

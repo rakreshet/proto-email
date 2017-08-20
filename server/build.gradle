@@ -1,0 +1,53 @@
+buildscript {
+  dependencies {
+    classpath "org.springframework.boot:spring-boot-gradle-plugin:$ver.boot"
+    classpath "com.traiana.kit:gradle-protobuf-plugin:$ver.kitGradle"
+  }
+}
+
+apply plugin: 'scala'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'com.traiana.kit.protobuf'
+apply plugin: 'io.spring.dependency-management'
+
+dependencyManagement {
+  dependencies {
+    dependency "com.datastax.cassandra:cassandra-driver-core:$ver.cassandraDriver" // boot-akka conflict
+  }
+}
+
+dependencies {
+  protobuf project(':common')
+
+  compile "com.traiana.kit:spring-boot-starter-grpc:$ver.kitLibs"
+  compile "com.trueaccord.scalapb:scalapb-runtime_$ver.scalaBase:$ver.scalapb"
+
+  compile "org.scala-lang:scala-library:$ver.scala"
+
+  compile "com.typesafe.akka:akka-actor_$ver.scalaBase:$ver.akka"
+  compile "com.typesafe.akka:akka-cluster_$ver.scalaBase:$ver.akka"
+  compile "com.typesafe.akka:akka-cluster-sharding_$ver.scalaBase:$ver.akka"
+  compile "com.typesafe.akka:akka-cluster-tools_$ver.scalaBase:$ver.akka"
+  compile "com.typesafe.akka:akka-stream_$ver.scalaBase:$ver.akka"
+  compile "com.typesafe.akka:akka-stream-kafka_$ver.scalaBase:$ver.akkaStreamKafka"
+  compile "com.typesafe.akka:akka-persistence_$ver.scalaBase:$ver.akka"
+  compile "com.typesafe.akka:akka-persistence-query_$ver.scalaBase:$ver.akka"
+  compile "com.typesafe.akka:akka-persistence-cassandra_$ver.scalaBase:$ver.akkaPersistenceCassandra"
+  compile "com.typesafe.akka:akka-slf4j_$ver.scalaBase:$ver.akka"
+}
+
+configurations {
+  compile.exclude module: 'slf4j-log4j12'
+}
+
+
+sourceSets {
+  main {
+    scala {
+      srcDirs += 'src/main/java'
+    }
+    java {
+      srcDirs = []
+    }
+  }
+}

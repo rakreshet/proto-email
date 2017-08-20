@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+import "scalapb/scalapb.proto";
+
+option java_multiple_files = true;
+option java_package = "com.traiana.email";
+
+option (scalapb.options) = {
+  package_name: "com.traiana.email.scalapb"
+};
+
+package email;
+
+message User {
+    string first_name = 1;
+    string last_name = 2;
+    string user_name = 3;
+    string password = 4;
+}
+
+message Email {
+    string title = 1;
+    string body = 2;
+    User sender = 3;
+    User Reciever = 4;
+}
+
+message ParamsPlaceHolder {
+}
+
+service EmailService {
+    rpc listUsers (Email) returns (stream User);
+}

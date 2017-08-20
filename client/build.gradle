@@ -1,0 +1,35 @@
+buildscript {
+  dependencies {
+    classpath "com.traiana.kit:gradle-protobuf-plugin:$ver.kitGradle"
+  }
+}
+
+apply plugin: 'com.traiana.kit.protobuf'
+apply plugin: 'scala'
+
+dependencies {
+  protobuf project(':common')
+
+  compile "org.scala-lang:scala-library:$ver.scala"
+
+  compile "io.grpc:grpc-core:$ver.grpc"
+  compile "io.grpc:grpc-netty:$ver.grpc"
+  compile "io.grpc:grpc-protobuf:$ver.grpc"
+  compile "io.grpc:grpc-stub:$ver.grpc"
+
+  compile "com.trueaccord.scalapb:scalapb-runtime_$ver.scalaBase:$ver.scalapb"
+  compile "com.trueaccord.scalapb:scalapb-runtime-grpc_$ver.scalaBase:$ver.scalapb"
+
+  compile "com.typesafe.akka:akka-actor_$ver.scalaBase:$ver.akka"
+}
+
+sourceSets {
+  main {
+    scala {
+      srcDirs += 'src/main/java'
+    }
+    java {
+      srcDirs = []
+    }
+  }
+}

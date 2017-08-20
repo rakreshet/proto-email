@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: chatter-server
+  main:
+    banner-mode: "off"
+  output:
+    ansi:
+      enabled: always
+
+traiana:
+  grpc:
+    port: 5050
